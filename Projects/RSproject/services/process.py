@@ -20,20 +20,25 @@ def process_recommendation(recommendation, reco_size=RECO_STANDARD.RECO_SIZE.val
 
     # 전체 사용자 이력 정보 조회
     df_ratings = load_data(PATH_INFO.DATA_RATINGS.value[1]) 
-    
+    df_meta = load_data(PATH_INFO.DATA_META.value[1])
+
     # 추천 사용자 이력 정보 조회 
     df_hist = df_ratings[df_ratings['userId'] == int(recommendation['user_id'])]
 
     # 추천 사용자 이력 정보를 바탕으로 추천 
     len_hist = len(df_hist)
-    # 이력이 없으면 인기도
+
+    # 이력이 없으면 popularity
     if not len_hist:
         recommendation['reco_type'] = RECO_TYPE.POPULARITY.name
-        recommendation['contents'] = recommend_popularity(df_ratings, reco_size)
-        
-    elif RECO_STANDARD.HEAVY_USER.value[1] > len_hist:
+        recommendation['contents'] = recommend_popularity(df_meta, reco_size)
+    
+    # heavy user면 contents based 
+    elif len_hist > RECO_STANDARD.HEAVY_USER.value[1]:
         recommendation['reco_type'] = RECO_TYPE.CONTENTS.name
         recommendation['contents'] = recommend_contents(df_ratings, df_hist, reco_size) 
+    
+    # 나머지는 collaborative
     else:
         recommendation['reco_type'] = RECO_TYPE.COLLABORATIVE.name
         recommendation['contents'] = recommend_collaborative(df_ratings, df_hist, reco_size) 

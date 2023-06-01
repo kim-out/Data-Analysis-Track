@@ -5,7 +5,7 @@ def recommend(args):
     recommendation = {
         'contents': None,
         'reco_type': None,
-        'user_id': args['user_id']
+        'user_id': args.user_id
     }
     return process_recommendation(recommendation) 
 

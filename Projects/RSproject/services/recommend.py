@@ -8,8 +8,10 @@ def __recommend_without_hist(reco_list, hist_list, reco_size):
     reco_set = set(reco_list) - set(hist_list)
     return list(reco_set)[:reco_size]
 
-def recommend_popularity(df_ratings, reco_size):
-    pass 
+def recommend_popularity(df_meta, reco_size):
+    contents = get_reco_of_popularity(df_meta)[:reco_size]
+    return list(contents)
+
     # 1. get_reco_of_popularity를 사용해서 추천 정렬 리스트(데이터 프레임)
     # 2. 추천 크기 만큼 짤라서 전달  
 
