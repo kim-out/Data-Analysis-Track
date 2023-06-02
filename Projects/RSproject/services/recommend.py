@@ -16,14 +16,22 @@ def recommend_popularity(df_meta, reco_size):
     # 2. 추천 크기 만큼 짤라서 전달  
 
 
-def recommend_contents(df_ratings, df_hist, reco_size):
-    pass 
+def recommend_contents(df_meta, df_ratings, df_hist, reco_size):
+    reco_list = get_reco_of_contents(df_meta,df_hist,df_ratings) # movieId
+    hist_list = list(df_hist['movieId'].values)
+    contents_id = __recommend_without_hist(reco_list, hist_list, reco_size)
+    contents = df_meta[df_meta['id'] == contents_id]['title'].values
+    return list(contents)
     # get_reco_of_contents를 사용해서 추천 
     # __recommend_without_hist 사용
 
 
-def recommend_collaborative(df_ratings, df_hist, reco_size):
-    pass 
+def recommend_collaborative(df_meta, df_ratings, df_hist, reco_size):
+    reco_list = get_reco_of_collaborative(df_meta, df_ratings) # movieId
+    hist_list = list(df_hist['movieId'].values)
+    contents_id = __recommend_without_hist(reco_list, hist_list, reco_size)
+    contents = df_meta[df_meta['id'] == contents_id]['title'].values
+    return list(contents)
     # get_reco_of_collaborative를 사용해서 추천 
     # __recommend_without_hist 사용
 

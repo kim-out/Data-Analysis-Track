@@ -20,7 +20,7 @@ def process_recommendation(recommendation, reco_size=RECO_STANDARD.RECO_SIZE.val
 
     # 전체 사용자 이력 정보 조회
     df_ratings = load_data(PATH_INFO.DATA_RATINGS.value[1]) 
-    df_meta = load_data(PATH_INFO.DATA_META.value[1])
+    df_meta = load_data(PATH_INFO.DATA_META.value[1],True)
 
     # 추천 사용자 이력 정보 조회 
     df_hist = df_ratings[df_ratings['userId'] == int(recommendation['user_id'])]
@@ -36,12 +36,12 @@ def process_recommendation(recommendation, reco_size=RECO_STANDARD.RECO_SIZE.val
     # heavy user면 contents based 
     elif len_hist > RECO_STANDARD.HEAVY_USER.value[1]:
         recommendation['reco_type'] = RECO_TYPE.CONTENTS.name
-        recommendation['contents'] = recommend_contents(df_ratings, df_hist, reco_size) 
+        recommendation['contents'] = recommend_contents(df_meta, df_ratings, df_hist, reco_size) 
     
     # 나머지는 collaborative
     else:
         recommendation['reco_type'] = RECO_TYPE.COLLABORATIVE.name
-        recommendation['contents'] = recommend_collaborative(df_ratings, df_hist, reco_size) 
+        recommendation['contents'] = recommend_collaborative(df_meta, df_ratings, df_hist, reco_size) 
     
     return __check_recommendation(recommendation, df_hist, reco_size)
 
